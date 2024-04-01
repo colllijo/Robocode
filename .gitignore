@@ -1,0 +1,10 @@
+# IDE
+.idea
+.vsc
+
+# Cache
+.cache
+
+
+# Build
+build

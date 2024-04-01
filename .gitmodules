@@ -1,0 +1,9 @@
+[submodule "lib/botapi/lib/fmt"]
+	path = lib/botapi/lib/fmt
+	url = git@github.com:fmtlib/fmt.git
+[submodule "lib/botapi/lib/IXWebSocket"]
+	path = lib/botapi/lib/IXWebSocket
+	url = git@github.com:machinezone/IXWebSocket.git
+[submodule "build/lib/json"]
+	path = build/lib/json
+	url = git@github.com:nlohmann/json.git
