@@ -1,14 +1,10 @@
 {
 	"name": "CollBot",
 	"version": "1.0.0",
-	"authors": [
-		"Metzger, Liam"
-	],
+	"authors": ["Metzger, Liam"],
 	"description": "A cool bot",
 	"homepage": "https://github.com/colllijo",
-	"countryCodes": [
-		"ch"
-	],
+	"countryCodes": ["ch"],
 	"platform": "Unix",
 	"programmingLang": "C++"
 }

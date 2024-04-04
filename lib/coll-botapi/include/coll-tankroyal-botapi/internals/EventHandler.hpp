@@ -2,26 +2,25 @@
 #define COLL_TANKROYAL_BOTAPI_EVENT_HANDLER_HPP
 
 #include <algorithm>
+#include <functional>
 #include <vector>
-
-#include "EventConsumer.hpp"
 
 #pragma once
 
 template <class T> struct ConsumerWithPriority {
-	EventConsumer<T> consumer;
+	std::function<void(T)> consumer;
 	int priority;
 
-	ConsumerWithPriority<T>(EventConsumer<T> consumer, int priority)
+	ConsumerWithPriority(const std::function<void(T)> &consumer, int priority)
 		: consumer(consumer), priority(priority) {}
 };
 
 template <class T> class EventHandler {
   public:
-	EventHandler();
-	~EventHandler();
+	EventHandler() = default;
+	~EventHandler() = default;
 
-	void subscribe(EventConsumer<T> subscriber, int priority = 1) {
+	void subscribe(const std::function<void(T)> &subscriber, int priority = 1) {
 		subscribers.push_back(ConsumerWithPriority<T>(subscriber, priority));
 	}
 
@@ -32,11 +31,11 @@ template <class T> class EventHandler {
 					  return a.priority < b.priority;
 				  });
 		for (const auto &subscriber : subscribers)
-			subscriber.consumer.accept(event);
+			subscriber.consumer(event);
 	}
 
   private:
-	std::vector<EventConsumer<T>> subscribers;
+	std::vector<ConsumerWithPriority<T>> subscribers;
 };
 
 #endif

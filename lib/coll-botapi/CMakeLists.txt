@@ -6,20 +6,26 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(LIBRARY_NAME coll-tankroyal-botapi)
 set(LIBRARY_HEADERS_DIR include/${LIBRARY_NAME})
 set(LIBRARY_HEADERS
-	${LIBRARY_HEADERS_DIR}/events/BotEvent.hpp
-	${LIBRARY_HEADERS_DIR}/events/ConnectedEvent.hpp
-	${LIBRARY_HEADERS_DIR}/events/ConnectionEvent.hpp
+	${LIBRARY_HEADERS_DIR}/events/BotEvents.hpp
+	${LIBRARY_HEADERS_DIR}/events/ConnectionEvents.hpp
+	${LIBRARY_HEADERS_DIR}/events/Events.hpp
+	${LIBRARY_HEADERS_DIR}/events/GameEvents.hpp
+	${LIBRARY_HEADERS_DIR}/events/Messages.hpp
 	${LIBRARY_HEADERS_DIR}/internals/BotEventHandler.hpp
 	${LIBRARY_HEADERS_DIR}/internals/BotInternals.hpp
-	${LIBRARY_HEADERS_DIR}/internals/EventConsumer.hpp
 	${LIBRARY_HEADERS_DIR}/internals/EventHandler.hpp
-	${LIBRARY_HEADERS_DIR}/message/Message.hpp
 	${LIBRARY_HEADERS_DIR}/Bot.hpp
 	${LIBRARY_HEADERS_DIR}/BotInfo.hpp
+	${LIBRARY_HEADERS_DIR}/BotResult.hpp
+	${LIBRARY_HEADERS_DIR}/BotState.hpp
+	${LIBRARY_HEADERS_DIR}/BulletState.hpp
+	${LIBRARY_HEADERS_DIR}/Color.hpp
+	${LIBRARY_HEADERS_DIR}/GameSetup.hpp
 )
 set(LIBRARY_SOURCES_DIR src)
 set(LIBRARY_SOURCES
 	${LIBRARY_SOURCES_DIR}/internals/BotInternals.cpp
+	${LIBRARY_SOURCES_DIR}/internals/BotEventHandler.cpp
 	${LIBRARY_SOURCES_DIR}/Bot.cpp
 	${LIBRARY_SOURCES_DIR}/BotInfo.cpp
 )

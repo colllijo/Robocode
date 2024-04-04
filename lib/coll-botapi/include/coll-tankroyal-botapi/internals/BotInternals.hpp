@@ -12,14 +12,19 @@
 
 #include <nlohmann/json.hpp>
 
+#include "../Bot.hpp"
 #include "../BotInfo.hpp"
-#include "../message/Message.hpp"
+#include "../events/Events.hpp"
+#include "../events/Messages.hpp"
+#include "./BotEventHandler.hpp"
 
 #pragma once
 
+class Bot;
+class BotEventHandler;
 class BotInternals {
   public:
-	BotInternals(const BotInfo &botInfo,
+	BotInternals(Bot *bot, const BotInfo &botInfo,
 				 const std::string &serverUrl = std::string(),
 				 const std::string &serverSecret = std::string());
 	~BotInternals();
@@ -43,13 +48,19 @@ class BotInternals {
 	std::unique_ptr<BotInfo> botInfo;
 
 	std::optional<int> id;
+
+	const std::unique_ptr<BotEventHandler> botEventHandler;
+
 	bool running;
+	bool stopped;
 
 	void initWebSocket();
 
 	void onMessage(const ix::WebSocketMessagePtr &msg);
 
 	void handleMessage(const nlohmann::json &message);
+	void handleGameStarted(const nlohmann::json &message);
+	void handleRoundStarted(const nlohmann::json &message);
 	void handleServerHandshake(const nlohmann::json &message);
 
 	void connect();
@@ -62,7 +73,11 @@ class BotInternals {
 		return std::string(URL);
 	};
 	static std::string getServerSecretFromEnv() {
-		return getenv(SERVER_SECRET.data());
+		const char *secret = getenv(SERVER_SECRET.data());
+
+		if (secret != nullptr)
+			return secret;
+		return std::string();
 	};
 };
 

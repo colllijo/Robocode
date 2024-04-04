@@ -1,6 +1,8 @@
 #include "CollBot.hpp"
 #include "coll-tankroyal-botapi/BotInfo.hpp"
 
+#include <iostream>
+
 CollBot::CollBot(const BotInfo &botInfo) : Bot(botInfo){};
 CollBot::~CollBot() = default;
 
