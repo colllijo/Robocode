@@ -1,12 +1,14 @@
 #ifndef COLL_TANKROYAL_BOTAPI_BOT_HPP
 #define COLL_TANKROYAL_BOTAPI_BOT_HPP
 
+#include <exception>
 #include <memory>
 #include <string>
 
+#include <fmt/format.h>
+
 #include "BotInfo.hpp"
-#include "coll-tankroyal-botapi/events/ConnectionEvents.hpp"
-#include "coll-tankroyal-botapi/internals/BotEventHandler.hpp"
+#include "events/ConnectionEvents.hpp"
 #include "internals/BotInternals.hpp"
 
 #pragma once
@@ -25,7 +27,7 @@ class Bot {
 	void
 	onConnectionError(const Events::Connection::ConnectionErrorEvent &event);
 
-  private:
+  protected:
 	std::unique_ptr<BotInternals> internals;
 };
 

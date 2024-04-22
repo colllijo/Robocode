@@ -1,5 +1,4 @@
 #include "BotEventHandler.hpp"
-#include <functional>
 
 BotEventHandler::BotEventHandler(Bot *bot) {
 	onConnected->subscribe(

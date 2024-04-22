@@ -1,7 +1,9 @@
 #ifndef COLL_TANKROYAL_BOTAPI_BOT_INTERNALS_HPP
 #define COLL_TANKROYAL_BOTAPI_BOT_INTERNALS_HPP
 
+#include <cstdio>
 #include <cstdlib>
+#include <latch>
 #include <memory>
 #include <optional>
 #include <string>
@@ -14,7 +16,10 @@
 
 #include "../Bot.hpp"
 #include "../BotInfo.hpp"
+#include "../BotResult.hpp"
+#include "../events/ConnectionEvents.hpp"
 #include "../events/Events.hpp"
+#include "../events/GameEvents.hpp"
 #include "../events/Messages.hpp"
 #include "./BotEventHandler.hpp"
 
@@ -23,62 +28,69 @@
 class Bot;
 class BotEventHandler;
 class BotInternals {
-  public:
-	BotInternals(Bot *bot, const BotInfo &botInfo,
-				 const std::string &serverUrl = std::string(),
-				 const std::string &serverSecret = std::string());
-	~BotInternals();
+public:
+    BotInternals(Bot* bot, const BotInfo& botInfo,
+        const std::string& serverUrl = std::string(),
+        const std::string& serverSecret = std::string());
+    ~BotInternals();
 
-	void start();
+    void start();
 
-	bool isRunning() const { return running; }
-	void setRunning(bool running) { this->running = running; }
+    bool isRunning() const { return running; }
+    void setRunning(bool running) { this->running = running; }
 
-  private:
-	constexpr static const fmt::string_view DEFAULT_SERVER_URL =
-		"ws://localhost:7654";
-	constexpr static const fmt::string_view SERVER_URL = "SERVER_URL";
-	constexpr static const fmt::string_view SERVER_SECRET = "SERVER_SECRET";
+    void print(const std::string& msg);
+    void printErr(const std::string& err);
 
-	std::string serverURL;
-	std::string serverSecret;
+private:
+    constexpr static const fmt::string_view DEFAULT_SERVER_URL = "ws://localhost:7654";
+    constexpr static const fmt::string_view SERVER_URL = "SERVER_URL";
+    constexpr static const fmt::string_view SERVER_SECRET = "SERVER_SECRET";
 
-	ix::WebSocket webSocket;
+    std::string serverURL;
+    std::string serverSecret;
 
-	std::unique_ptr<BotInfo> botInfo;
+    ix::WebSocket webSocket;
+    std::latch closedLatch;
 
-	std::optional<int> id;
+    std::unique_ptr<BotInfo> botInfo;
 
-	const std::unique_ptr<BotEventHandler> botEventHandler;
+    std::optional<int> id;
 
-	bool running;
-	bool stopped;
+    const std::unique_ptr<BotEventHandler> botEventHandler;
 
-	void initWebSocket();
+    bool running;
+    bool stopped;
 
-	void onMessage(const ix::WebSocketMessagePtr &msg);
+    void initWebSocket();
 
-	void handleMessage(const nlohmann::json &message);
-	void handleGameStarted(const nlohmann::json &message);
-	void handleRoundStarted(const nlohmann::json &message);
-	void handleServerHandshake(const nlohmann::json &message);
+    void onMessage(const ix::WebSocketMessagePtr& msg);
 
-	void connect();
+    void handleMessage(const nlohmann::json& message);
+    void handleGameStarted(const nlohmann::json& message);
+    void handleGameEnded(const nlohmann::json& message);
+    void handleGameAborted(const nlohmann::json& message);
+    void handleRoundStarted(const nlohmann::json& message);
+    void handleServerHandshake(const nlohmann::json& message);
 
-	static std::string getServerURLFromEnv() {
-		const char *URL = getenv(SERVER_URL.data());
-		if (URL == nullptr)
-			URL = DEFAULT_SERVER_URL.data();
+    void connect();
 
-		return std::string(URL);
-	};
-	static std::string getServerSecretFromEnv() {
-		const char *secret = getenv(SERVER_SECRET.data());
+    static std::string getServerURLFromEnv()
+    {
+        const char* URL = getenv(SERVER_URL.data());
+        if (URL == nullptr)
+            URL = DEFAULT_SERVER_URL.data();
 
-		if (secret != nullptr)
-			return secret;
-		return std::string();
-	};
+        return std::string(URL);
+    };
+    static std::string getServerSecretFromEnv()
+    {
+        const char* secret = getenv(SERVER_SECRET.data());
+
+        if (secret != nullptr)
+            return secret;
+        return std::string();
+    };
 };
 
 #endif

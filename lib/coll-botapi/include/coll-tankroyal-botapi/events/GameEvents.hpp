@@ -1,6 +1,8 @@
 #ifndef COLL_TANKROYAL_BOTAPI_GAME_EVENTS_HPP
 #define COLL_TANKROYAL_BOTAPI_GAME_EVENTS_HPP
 
+#include <nlohmann/json.hpp>
+
 #include "../BotResult.hpp"
 #include "../GameSetup.hpp"
 #include "Events.hpp"
@@ -53,6 +55,14 @@ struct RoundEndedEvent {
 		: type(Type::RoundEndedEventForBot), roundNumber(roundNumber),
 		  turnNumber(turnNumber), result(result) {}
 };
+
+inline BotResult messageToBotResult(const nlohmann::json &result) {
+	return BotResult(
+		result["rank"], result["survival"], result["lastSurvivorBonus"],
+		result["bulletDamage"], result["bulletKillBonus"], result["ramDamage"],
+		result["ramKillBonus"], result["totalScore"], result["firstPlaces"],
+		result["secondPlaces"], result["thirdPlaces"]);
+}
 }; // namespace Game
 }; // namespace Events
 

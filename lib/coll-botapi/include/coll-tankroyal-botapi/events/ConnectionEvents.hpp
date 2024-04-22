@@ -23,10 +23,9 @@ struct ConnectedEvent : public ConnectionEvent {
 };
 
 struct ConnectionErrorEvent : public ConnectionEvent {
-	const std::exception error;
+	const std::string error;
 
-	ConnectionErrorEvent(const std::string serverURL,
-						 const std::exception &error)
+	ConnectionErrorEvent(const std::string serverURL, const std::string &error)
 		: ConnectionEvent(Type::ConnectionError, serverURL), error(error) {}
 };
 
